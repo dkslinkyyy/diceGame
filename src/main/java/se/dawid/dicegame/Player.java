@@ -2,7 +2,7 @@ package se.dawid.dicegame;
 
 public class Player {
 
-    private String name;
+    private final String name;
     private int points;
     private boolean playedTurn = false;
 

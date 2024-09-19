@@ -1,67 +1,100 @@
 package se.dawid.dicegame;
 
-import java.io.IOException;
 import java.util.*;
-
 
 public class Main {
 
-    private static final String ROLL_DICE_MSG = "Skriv 'roll' för att kasta tärningen ";
+    public static int rollDice() {
+        Random rand = new Random();
 
+        return rand.nextInt(6) + 1;
+    }
+
+    public static void sleep() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         boolean inGame = false;
 
-        int turns = 0;
+        int turns = 2;
 
         String input;
 
-        Player nextPlayer = null, player1 = null, player2 = null;
-
-
         Player[] players = new Player[2];
+
+        Player nextPlayer = null;
 
         while (true) {
             if (inGame) {
 
-                System.out.println("Näst på tur " + nextPlayer.getName());
-                System.out.println(ROLL_DICE_MSG);
+                Message.ROLL_DICE.print(String.valueOf(turns));
+
                 input = scanner.nextLine();
 
+                if(input.equalsIgnoreCase("roll")) {
 
-                if (input.equalsIgnoreCase("roll")) {
 
                     int rolledResult = rollDice();
-                    System.out.println("Du kastade " + rolledResult);
+
+                    System.out.println();
+                    Message.ROLLED_DICE.print(rolledResult + "");
+                    System.out.println();
+
 
                     nextPlayer.setPoints(nextPlayer.getPoints() + rolledResult);
-                    System.out.println("Det totala utfallet: " + nextPlayer.getPoints());
-                    System.out.println('\n');
 
-                    turns++;
+                    turns--;
 
+                    sleep();
 
-                    if(turns == 2) {
+                    if(turns == 0) {
 
                         nextPlayer.setPlayedTurn(true);
 
-                        if(player1.hasPlayedTurn() && player2.hasPlayedTurn()) {
-                            int winner = Math.max(player1.getPoints(), player2.getPoints());
-                            Player winningPlayer = winner == player1.getPoints() ? player1 : player2;
-                            System.out.println("Grattis " + winningPlayer.getName() + " du vann med " + winningPlayer.getPoints());
+                        if(players[0].hasPlayedTurn() && players[1].hasPlayedTurn()) {
+                            int winner = Math.max(players[0].getPoints(), players[1].getPoints());
+                            Player winningPlayer = winner == players[0].getPoints() ? players[0] : players[1];
+
+                            Message.WINNER_PRE
+                                    .print();
+
+                            sleep();
+
+                            Message.WINNER
+                                    .print(winningPlayer.getName(),
+                                            String.valueOf(winningPlayer.getPoints()));
+
                             break;
                         }
 
-                        if(nextPlayer == player1) {
-                            nextPlayer = player2;
+                        Message.TOTAL_POINTS
+                                .print(nextPlayer.getPoints()+"");
+
+                        sleep();
+
+                        if(nextPlayer == players[0]) {
+                            nextPlayer = players[1];
                         }else{
-                            nextPlayer = player1;
+                            nextPlayer = players[0];
                         }
 
-                        turns = 0;
-                        System.out.println("Byter till nästa spelare!");
+                        turns = 2;
+
+
+                        System.out.println();
+                        Message.NEXT_PLAYER.print();
+                        System.out.println();
+                        Message.NEXT_TURN.print(nextPlayer.getName());
+
+                        sleep();
+
 
                     }
 
@@ -71,16 +104,25 @@ public class Main {
             } else {
 
                 for(int i = 0; i<players.length; i++) {
-                    System.out.println("Ange spelare "+ (i+1) +" namn");
+                    Message.PLAYER_JOINING.print();
+
                     String player_name = scanner.nextLine();
+
                     players[i] = new Player(player_name, 0);
 
-                    System.out.println(players.length + " " + i);
-                    System.out.println(player_name + " är nu med i spelet");
+                    Message.PLAYER_JOINED.print(player_name);
+                    sleep();
                 }
 
 
+
                 nextPlayer = players[0];
+
+                System.out.println();
+                Message.NEXT_TURN.print(nextPlayer.getName());
+
+                sleep();
+
 
                 inGame = true;
             }
@@ -90,17 +132,8 @@ public class Main {
 
     }
 
-    public static int rollDice() {
-        Random rand = new Random();
-
-        return rand.nextInt(6) + 1;
-    }
 
 
-    enum Message {
-
-
-    }
 }
 
 
