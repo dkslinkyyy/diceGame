@@ -1,5 +1,6 @@
 package se.dawid.dicegame;
 
+import javax.swing.*;
 import java.util.*;
 
 public class Main {
@@ -18,13 +19,13 @@ public class Main {
         }
     }
 
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         boolean inGame = false;
 
         int turns = 2;
-
         String input;
 
         Player[] players = new Player[2];
@@ -38,7 +39,7 @@ public class Main {
 
                 input = scanner.nextLine();
 
-                if(input.equalsIgnoreCase("roll")) {
+                if (input.equalsIgnoreCase("roll")) {
 
 
                     int rolledResult = rollDice();
@@ -54,11 +55,24 @@ public class Main {
 
                     sleep();
 
-                    if(turns == 0) {
+                    if (turns == 0) {
 
                         nextPlayer.setPlayedTurn(true);
 
-                        if(players[0].hasPlayedTurn() && players[1].hasPlayedTurn()) {
+                        if (players[0].hasPlayedTurn() && players[1].hasPlayedTurn()) {
+
+                            if (players[0].getPoints() == players[1].getPoints()) {
+
+                                Message.WINNER_PRE
+                                        .print();
+
+                                sleep();
+
+                                Message.WINNER_DRAW.print(String.valueOf(players[0].getPoints()));
+
+                                break;
+                            }
+
                             int winner = Math.max(players[0].getPoints(), players[1].getPoints());
                             Player winningPlayer = winner == players[0].getPoints() ? players[0] : players[1];
 
@@ -75,13 +89,13 @@ public class Main {
                         }
 
                         Message.TOTAL_POINTS
-                                .print(nextPlayer.getPoints()+"");
+                                .print(nextPlayer.getPoints() + "");
 
                         sleep();
 
-                        if(nextPlayer == players[0]) {
+                        if (nextPlayer == players[0]) {
                             nextPlayer = players[1];
-                        }else{
+                        } else {
                             nextPlayer = players[0];
                         }
 
@@ -103,7 +117,8 @@ public class Main {
 
             } else {
 
-                for(int i = 0; i<players.length; i++) {
+
+                for (int i = 0; i < players.length; i++) {
                     Message.PLAYER_JOINING.print();
 
                     String player_name = scanner.nextLine();
@@ -113,8 +128,6 @@ public class Main {
                     Message.PLAYER_JOINED.print(player_name);
                     sleep();
                 }
-
-
 
                 nextPlayer = players[0];
 
@@ -131,7 +144,6 @@ public class Main {
         }
 
     }
-
 
 
 }

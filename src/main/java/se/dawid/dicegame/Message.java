@@ -17,7 +17,10 @@ public enum Message {
     TOTAL_POINTS("Det totala utfallet blev %s"),
 
     WINNER_PRE("Vinnaren är..."),
-    WINNER("Grattis %p, Du har vunnit! Spelaren hade %s poäng!");
+
+    WINNER("Grattis %p, Du har vunnit! Spelaren hade %s poäng!"),
+
+    WINNER_DRAW("Atans! Ingen vann! Det blev oavgjort.. Båda spelarna hade %s poäng");
 
     private final String text;
 
@@ -25,13 +28,15 @@ public enum Message {
         this.text = text;
     }
 
-    public Message print(String... values) {
+    public void print(String... values) {
         String formatted = text;
 
         for(String value : values) {
 
+
+
             if (formatted.contains("%p")) {
-                formatted = formatted.replaceAll("%p", value).replaceAll("%n", "\n");
+                formatted = formatted.replaceAll("%p", value);
 
             } else if (formatted.contains("%s")) {
                 formatted = formatted.replaceAll("%s", value);
@@ -41,7 +46,6 @@ public enum Message {
         }
 
         System.out.println(formatted);
-        return this;
     }
 
 
