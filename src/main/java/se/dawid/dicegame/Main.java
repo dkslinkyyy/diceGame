@@ -35,13 +35,17 @@ public class Main {
                 Utils.print(Message.NEXT_TURN, true,  nextPlayer.getName());
                 Utils.sleep();
 
+                System.out.println("Against pc");
+
             }
 
         }
 
     }
     public static void handleGameLoop() {
-        Utils.print(Message.ROLL_DICE, false, String.valueOf(turns));
+        Utils.print(Message.ROLL_DICE,
+                false,
+                String.valueOf(turns));
         input = scanner.nextLine();
 
         if (input.equalsIgnoreCase("roll")) {
@@ -51,7 +55,10 @@ public class Main {
 
     public static void processTurn() {
         int rolledResult = Utils.rollDice();
-        Utils.print(Message.ROLLED_DICE, true, String.valueOf(rolledResult));
+        Utils.print(Message.ROLLED_DICE,
+                true,
+                String.valueOf(rolledResult));
+
         nextPlayer.addPoints(rolledResult);
 
         if(nextPlayer.getPoints() > winnerPoints) {
@@ -68,23 +75,6 @@ public class Main {
         }
 
         Utils.sleep();
-    }
-
-    public static void checkWinner() {
-        int gameFinished = Arrays.stream(players).filter(player -> !player.hasPlayedTurn()).toList().size();
-
-        if (gameFinished == 0 && winner != null) {
-            Utils.print(Message.WINNER_PRE, false);
-            Utils.sleep();
-            Utils.print(Message.WINNER, false, winner.getName(), String.valueOf(winner.getPoints()));
-            Utils.sleep();
-
-            Arrays.stream(players).filter(player -> player !=winner).forEach(player -> {
-                Utils.print(Message.TOTAL_POINTS, false, player.getName(), String.valueOf(player.getPoints()));
-            });
-
-            System.exit(0);
-        }
     }
 
     public static void setupPlayers() {
@@ -108,6 +98,31 @@ public class Main {
 
         Utils.print(Message.NEXT_TURN, false, nextPlayer.getName());
         Utils.sleep();
+    }
+
+    public static void checkWinner() {
+        int gameFinished = Arrays.stream(players).filter(player -> !player.hasPlayedTurn()).toList().size();
+
+        if (gameFinished == 0 && winner != null) {
+            Utils.print(Message.WINNER_PRE,
+                    false);
+            Utils.sleep();
+
+            Utils.print(Message.WINNER,
+                    false,
+                    winner.getName(),
+                    String.valueOf(winner.getPoints()));
+
+            Utils.sleep();
+
+            Arrays.stream(players).filter(player -> player !=winner).forEach(player -> {
+                Utils.print(Message.TOTAL_POINTS,
+                        false, player.getName(),
+                        String.valueOf(player.getPoints()));
+            });
+
+            System.exit(0);
+        }
     }
 
 }
