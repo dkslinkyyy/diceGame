@@ -14,7 +14,7 @@ public enum Message {
 
     PLAYER_JOINING("Ange namn på spelare %s"),
 
-    TOTAL_POINTS("Det totala utfallet blev %s"),
+    TOTAL_POINTS("Det totala utfallet för %p blev %s"),
 
     WINNER_PRE("Vinnaren är..."),
 
@@ -28,24 +28,9 @@ public enum Message {
         this.text = text;
     }
 
-    public void print(String... values) {
-        String formatted = text;
 
-        for(String value : values) {
-
-
-
-            if (formatted.contains("%p")) {
-                formatted = formatted.replaceAll("%p", value);
-
-            } else if (formatted.contains("%s")) {
-                formatted = formatted.replaceAll("%s", value);
-            }
-
-
-        }
-
-        System.out.println(formatted);
+    String getText() {
+        return text;
     }
 
 
