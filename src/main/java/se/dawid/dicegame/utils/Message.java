@@ -1,4 +1,4 @@
-package se.dawid.dicegame;
+package se.dawid.dicegame.utils;
 
 public enum Message {
 
@@ -12,7 +12,7 @@ public enum Message {
 
     PLAYER_JOINED("%p är nu med i spelet."),
 
-    PLAYER_JOINING("Ange namn på spelare"),
+    PLAYER_JOINING("Ange namn på spelare %s"),
 
     TOTAL_POINTS("Det totala utfallet blev %s"),
 
