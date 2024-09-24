@@ -2,17 +2,20 @@ package se.dawid.dicegame.utils;
 
 public enum Message {
 
-    ROLL_DICE("Skriv 'roll' för att kasta tärningen, Du har %s försök"),
+    AMOUNT_OF_ROUND("Hur många rundor vill du spela mot datorn?"),
+    PLAYER_JOINING("Ange ditt spelarnamn"),
+
+    GAME_START("Då påbörjar vi spelet!"),
+
+    ROLL_DICE("Tryck på 'enter' knappen för att kasta tärningen, Du har %s försök"),
+
+    ROLLING("Kastar.."),
 
     ROLLED_DICE("Du kastade %s"),
 
-    NEXT_TURN("Näst på tur %p"),
+    PC_TURN("Nu är det datorns tur!"),
 
-    NEXT_PLAYER("Byter till nästa spelare!"),
-
-    PLAYER_JOINED("%p är nu med i spelet."),
-
-    PLAYER_JOINING("Ange namn på spelare %s"),
+    PC_ROLLED_DICE("Datorn kastade tärningen och fick %s "),
 
     TOTAL_POINTS("Det totala utfallet för %p blev %s"),
 

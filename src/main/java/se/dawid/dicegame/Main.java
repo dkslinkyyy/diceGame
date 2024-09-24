@@ -7,122 +7,118 @@ import javax.swing.*;
 import java.util.*;
 
 public class Main {
-    private static Scanner scanner = new Scanner(System.in);
+    private static Scanner scanner;
 
     private static boolean inGame = false;
 
-    private static int MAX_TURNS = 2;
+    private static final int MAX_TURNS = 2;
     private static int turns = MAX_TURNS;
-    private static int winnerPoints = 0;
+
+    private static int computerPoints = 0;
+
     private static String input;
 
-    private static Player[] players = new Player[3];
+    private static int rolledDice = 0;
 
-    private static Player nextPlayer, winner;
-    private static int nextPlayerIndex = 0;
+    private static int rounds = 0;
+
+    private static Player player;
 
     public static void main(String[] args) {
+        scanner = new Scanner(System.in);
+
         while (true) {
             if (inGame) {
                 handleGameLoop();
             } else {
-                setupPlayers();
 
+                setup();
                 inGame = true;
+            }
+        }
+    }
 
-                nextPlayer = players[0];
+    public static void handleGameLoop() {
+        if(rounds == 0) {
+            gameEnd();
+            return;
+        }
+        if (player.getTurns() == 0) {
+            if (turns == 0) {
+                player.setTurns(MAX_TURNS);
+                turns = MAX_TURNS;
 
-                Utils.print(Message.NEXT_TURN, true,  nextPlayer.getName());
-                Utils.sleep();
+                rounds--;
 
-                System.out.println("Against pc");
-
+                return;
             }
 
+            processTurnForPC();
+
+            turns--;
+
+            return;
+        }
+
+        Utils.print(Message.ROLL_DICE, false, String.valueOf(player.getTurns()));
+
+
+
+        input = scanner.nextLine();
+
+        if (input.equalsIgnoreCase("")) {
+
+            processTurn();
         }
 
     }
-    public static void handleGameLoop() {
-        Utils.print(Message.ROLL_DICE,
-                false,
-                String.valueOf(turns));
-        input = scanner.nextLine();
 
-        if (input.equalsIgnoreCase("roll")) {
-            processTurn();
-        }
+    public static void gameEnd() {
+        System.out.println("End");
+
+        System.exit(0);
+    }
+
+    public static void processTurnForPC() {
+        Utils.print(Message.ROLLING, true);
+        Utils.sleep();
+
+        rolledDice = Utils.rollDice();
+        computerPoints += rolledDice;
+        Utils.print(Message.PC_ROLLED_DICE, true, String.valueOf(computerPoints));
+
+        Utils.sleep();
     }
 
     public static void processTurn() {
-        int rolledResult = Utils.rollDice();
-        Utils.print(Message.ROLLED_DICE,
-                true,
-                String.valueOf(rolledResult));
-
-        nextPlayer.addPoints(rolledResult);
-
-        if(nextPlayer.getPoints() > winnerPoints) {
-            winnerPoints = nextPlayer.getPoints();
-            winner = nextPlayer;
-        }
-
-        turns--;
-
-        if (turns == 0) {
-            nextPlayer.setPlayedTurn(true);
-            checkWinner();
-            switchPlayer();
-        }
-
+        Utils.print(Message.ROLLING, true);
         Utils.sleep();
+
+        rolledDice = Utils.rollDice();
+
+        Utils.print(Message.ROLLED_DICE, true, String.valueOf(rolledDice));
+        player.addPoints(rolledDice);
+        player.setTurns(player.getTurns() - 1);
+
+
     }
 
-    public static void setupPlayers() {
-        for (int i = 0; i < players.length; i++) {
-            String nextPlayerSelection = String.valueOf(i+1);
-            Utils.print(Message.PLAYER_JOINING, false, nextPlayerSelection);
-            String player_name = scanner.nextLine();
+    public static void setup() {
+        Utils.print(Message.AMOUNT_OF_ROUND, false);
 
-            players[i] = new Player(player_name, 0);
-            Utils.print(Message.PLAYER_JOINED, false, player_name);
+        if (scanner.hasNextInt()) {
+            rounds = scanner.nextInt();
+            System.out.println(rounds);
 
-            Utils.sleep();
+
+            player = new Player("spelare1", 0, MAX_TURNS);
+            Utils.print(Message.GAME_START, true);
+            return;
         }
-    }
-    private static void switchPlayer() {
-        nextPlayerIndex++;
-        nextPlayer = players[nextPlayerIndex];
-        System.out.println(nextPlayerIndex);
-        turns = MAX_TURNS;
-        Utils.print(Message.NEXT_PLAYER, false);
 
-        Utils.print(Message.NEXT_TURN, false, nextPlayer.getName());
-        Utils.sleep();
-    }
+        scanner.next();
+        setup();
 
-    public static void checkWinner() {
-        int gameFinished = Arrays.stream(players).filter(player -> !player.hasPlayedTurn()).toList().size();
-
-        if (gameFinished == 0 && winner != null) {
-            Utils.print(Message.WINNER_PRE,
-                    false);
-            Utils.sleep();
-
-            Utils.print(Message.WINNER,
-                    false,
-                    winner.getName(),
-                    String.valueOf(winner.getPoints()));
-
-            Utils.sleep();
-
-            Arrays.stream(players).filter(player -> player !=winner).forEach(player -> {
-                Utils.print(Message.TOTAL_POINTS,
-                        false, player.getName(),
-                        String.valueOf(player.getPoints()));
-            });
-
-            System.exit(0);
-        }
     }
 
 }
