@@ -1,4 +1,4 @@
-package se.dawid.dicegame;
+package se.dawid.dicegame.game;
 
 public class Player {
 
@@ -14,6 +14,7 @@ public class Player {
     public boolean hasPlayedTurn() {
         return playedTurn;
     }
+
 
     public void setPlayedTurn(boolean playedTurn) {
         this.playedTurn = playedTurn;
