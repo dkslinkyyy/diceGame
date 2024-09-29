@@ -10,30 +10,31 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+
+        Game selectedGame = runGameSelection(sc);
+
+        selectedGame.setup(sc);
+        selectedGame.run(sc);
+
+    }
+
+    public static Game runGameSelection(Scanner sc) {
         Game game = null;
 
-        while(true) {
-            if(game != null) {
-                if(game.canSwitchTurn()) {
-                    game.switchTurn(sc);
-                }
-                game.handleTurn(sc); //start
-
-            }else {
-                System.out.println("""
+        do {
+            System.out.println("""
                     Välj spelläge: 
                     [1]: Mot riktig spelare
                     [2]: Mot dator
                     [3]: Dator mot dator (simulering)
                     """);
 
-                int option = sc.nextInt();
-                game = GameFactory.createGame(option, sc);
-            }
+            int option = Integer.parseInt(sc.nextLine());
+            game = GameFactory.createGame(option, sc);
 
+        }while(game == null);
 
-        }
-
+        return game;
     }
 
 }

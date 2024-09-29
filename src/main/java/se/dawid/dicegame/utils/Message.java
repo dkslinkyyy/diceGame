@@ -4,7 +4,9 @@ public enum Message {
 
     ROLL_DICE("Skriv 'roll' för att kasta tärningen, Du har %s försök"),
 
-    ROLLED_DICE("Du kastade %s"),
+    PLAYER_ROLLED_DICE("Du kastade %s"),
+
+    PC_ROLLED_DICE("%p kastade tärningen och fick %s"),
 
     NEXT_TURN("Näst på tur %p"),
 

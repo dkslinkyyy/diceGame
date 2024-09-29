@@ -1,5 +1,6 @@
 package se.dawid.dicegame.game;
 
+import se.dawid.dicegame.utils.Message;
 import se.dawid.dicegame.utils.Utils;
 
 import java.util.ArrayList;
@@ -11,59 +12,81 @@ public abstract class Game {
     //hårdkoddat bs
     private final int MAX_TURNS = 2;
     private int turnsLeft = MAX_TURNS;
-
     private final int rounds;
-
     private final List<Player> players;
-
     private int playerCount;
+    private int currentPlayerIndex;
 
-    protected Game(String internalName, int playerCount, int rounds) {
+    public Game(int playerCount, int rounds) {
         this.playerCount = playerCount;
         this.players = new ArrayList<>();
         this.rounds = rounds;
-
-        System.out.println("Förbereder %s..".replaceAll("%s", internalName));
-        Utils.sleep();
     }
 
-    public abstract void switchTurn(Scanner scanner);
+    public void run(Scanner scanner) {
+        Utils.print(Message.NEXT_TURN, true, getCurrentPlayer().getName());
+
+        while(true) {
+            if(canSwitchTurn()) {
+                switchTurn(scanner);
+            }
+
+            handleTurn(scanner);
+        }
+    }
+
+    public void switchTurn(Scanner scanner) {
+        turnsLeft = MAX_TURNS;
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        Utils.print(Message.NEXT_PLAYER, true);
+        Utils.sleep();
+        Utils.print(Message.NEXT_TURN, false, getCurrentPlayer().getName());
+
+    }
+
+    public void declareWinner(Scanner scanner) {
+        Player winner = getPlayers().stream().max((p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints())).orElse(null);
+        if (winner != null) {
+            Utils.print(Message.WINNER_PRE, false);
+            Utils.sleep();
+            Utils.print(Message.WINNER, false, String.valueOf(winner.getName()), String.valueOf(winner.getPoints()));
+
+            System.exit(0);
+        }
+    }
 
     public abstract void handleTurn(Scanner scanner);
 
-    public abstract void declareWinner(Scanner scanner);
 
-    public abstract void setupPlayers(Scanner scanner);
+    public abstract void setup(Scanner scanner);
+
 
     public boolean canSwitchTurn() {
-        return turnsLeft <= 0;
+        return turnsLeft == 0;
     }
 
-    public boolean canStart() {
-        return !players.isEmpty();
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    public int getRounds() {
-        return rounds;
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
     }
 
     public void addPlayer(Player player) {
         players.add(player);
     }
-    public int getPlayersCount() {
-        return playerCount;
+
+    public boolean isGameOver() {
+        return players.stream().allMatch(Player::hasPlayedTurn);
     }
 
-    public boolean hasPlayers() {
-        return !players.isEmpty();
+    public void decreaseTurns(int decrease) {
+        turnsLeft -= decrease;
     }
 
     public int getTurnsLeft() {
         return turnsLeft;
-    }
-
-    public void setTurnsLeft(int turnsLeft) {
-        this.turnsLeft = turnsLeft;
     }
 }
 

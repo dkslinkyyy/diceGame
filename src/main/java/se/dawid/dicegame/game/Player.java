@@ -15,13 +15,16 @@ public class Player {
         return playedTurn;
     }
 
-
     public void setPlayedTurn(boolean playedTurn) {
         this.playedTurn = playedTurn;
     }
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public void addPoints(int points) {
+        this.points += points;
     }
 
     public int getPoints() {
