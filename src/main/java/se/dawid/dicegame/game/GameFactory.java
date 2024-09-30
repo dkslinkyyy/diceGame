@@ -22,11 +22,12 @@ public class GameFactory {
             case 2:
                 System.out.println("Hur många rundor vill du spela?");
                 rounds = Integer.parseInt(scanner.nextLine());
-                return new SimulationGame(rounds);
+                return new AIGame(rounds);
             case 3:
+
                 System.out.println("Hur många rundor vill du spela?");
                 rounds = Integer.parseInt(scanner.nextLine());
-                return new AIGame(rounds);
+                return new SimulationGame(rounds);
             default:
                 return null;
         }

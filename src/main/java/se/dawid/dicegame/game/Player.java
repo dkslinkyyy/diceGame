@@ -4,11 +4,12 @@ public class Player {
 
     private final String name;
     private int points;
-    private boolean playedTurn = false;
+    private boolean playedTurn;
 
     public Player(String name, int points) {
         this.name = name;
         this.points = points;
+        this.playedTurn = false;
     }
 
     public boolean hasPlayedTurn() {
@@ -17,10 +18,6 @@ public class Player {
 
     public void setPlayedTurn(boolean playedTurn) {
         this.playedTurn = playedTurn;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
     }
 
     public void addPoints(int points) {

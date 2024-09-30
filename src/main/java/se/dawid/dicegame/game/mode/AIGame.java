@@ -24,23 +24,14 @@ public class AIGame extends Game {
             Utils.print(Message.ROLL_DICE, false, String.valueOf(getTurnsLeft()));
 
             String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("roll")) {
+            if (input.equalsIgnoreCase("")) {
                 int rolledResult = Utils.rollDice();
                 Utils.print(Message.PLAYER_ROLLED_DICE, true, String.valueOf(rolledResult));
 
                 currentPlayer.addPoints(rolledResult);
-                decreaseTurns(1);
             }
         }
 
-        if (getTurnsLeft() == 0) {
-            currentPlayer.setPlayedTurn(true);
-            Utils.print(Message.TOTAL_POINTS, true, String.valueOf(currentPlayer.getPoints()));
-
-            if (isGameOver()) {
-                declareWinner(scanner);
-            }
-        }
     }
 
     @Override
@@ -60,6 +51,5 @@ public class AIGame extends Game {
 
         Utils.sleep();
 
-        decreaseTurns(1);
     }
 }

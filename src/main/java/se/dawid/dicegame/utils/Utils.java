@@ -43,7 +43,7 @@ public class Utils {
 
 
     //Bygg en interface funktion som kan testa en int som inmatning
-    //Kolla om det är en int -> om inte kasta ut aritmetic
+    //Kolla om det är en int -> om inte be spelaren skriva om
     //ev ifall siffran är högre än något
 
 }

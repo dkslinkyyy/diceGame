@@ -25,16 +25,6 @@ public class SimulationGame extends Game {
 
         Utils.sleep();
 
-        decreaseTurns(1);
-
-        if (getTurnsLeft() == 0) {
-            currentPlayer.setPlayedTurn(true);
-            Utils.print(Message.TOTAL_POINTS, true, String.valueOf(currentPlayer.getPoints()));
-
-            if (isGameOver()) {
-                declareWinner(scanner);
-            }
-        }
     }
 
     @Override
