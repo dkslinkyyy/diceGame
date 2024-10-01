@@ -2,6 +2,7 @@ package se.dawid.dicegame.utils;
 
 public enum Message {
 
+    THROWING_DICE("Kastar..."),
     ROLL_DICE("Tryck på 'enter' knappen för att kasta tärningen, Du har %s försök"),
 
     PLAYER_ROLLED_DICE("Du kastade %s"),

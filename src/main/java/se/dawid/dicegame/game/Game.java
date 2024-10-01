@@ -11,6 +11,7 @@ public abstract class Game {
 
     private final int MAX_TURNS = 2;
     private final int playerCount;
+    private final int rounds;
     private final List<Player> players;
 
     private int turnsLeft = MAX_TURNS;
@@ -19,6 +20,7 @@ public abstract class Game {
 
     public Game(int playerCount, int rounds) {
         this.playerCount = playerCount;
+        this.rounds = rounds;
         this.roundsLeft = rounds;
         this.players = new ArrayList<>();
     }
@@ -29,13 +31,17 @@ public abstract class Game {
 
             if (isRoundComplete()) {
                 handleEndOfRound();
+
+            }
+
+            if(roundsLeft == 0)  {
+                declareWinner();
+                break;
             }
         }
-        declareWinner();
     }
 
     private void playRound(Scanner scanner) {
-        Utils.print(Message.NEXT_TURN, true, getCurrentPlayer().getName());
         while (turnsLeft > 0) {
             playTurn(scanner);
         }
@@ -51,18 +57,23 @@ public abstract class Game {
     private void completeTurn() {
         getCurrentPlayer().setPlayedTurn(true);
         Utils.print(Message.TOTAL_POINTS, true, String.valueOf(getCurrentPlayer().getPoints()));
-        turnsLeft = MAX_TURNS;
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.size(); //beräknar nästa spelare med hjälp av nuvarande plats plus ett, modulus, antal spelare.
-        Utils.print(Message.NEXT_PLAYER, true);
-        Utils.sleep();
-        Utils.print(Message.NEXT_TURN, false, getCurrentPlayer().getName());
+
+        if (roundsLeft > 0) {
+            turnsLeft = MAX_TURNS;
+            currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+            if (!isRoundComplete()) {
+                Utils.print(Message.NEXT_PLAYER, true);
+                Utils.sleep();
+                Utils.print(Message.NEXT_TURN, false, getCurrentPlayer().getName());
+                Utils.sleep();
+
+            }
+        }
     }
 
 
     private void handleEndOfRound() {
-        System.out.println(roundsLeft);
         roundsLeft--;
-        System.out.println(roundsLeft);
         resetPlayersForNextRound();
     }
 
@@ -72,7 +83,7 @@ public abstract class Game {
             Utils.print(Message.WINNER_PRE, false);
             Utils.sleep();
             Utils.print(Message.WINNER, false, String.valueOf(winner.getName()), String.valueOf(winner.getPoints()));
-            System.exit(0); // End the game
+            System.exit(0); // avsluta spelet
         }
     }
 

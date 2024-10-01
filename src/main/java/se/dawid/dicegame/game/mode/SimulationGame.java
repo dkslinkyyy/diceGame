@@ -17,10 +17,11 @@ public class SimulationGame extends Game {
     public void handleTurn(Scanner scanner) {
         Player currentPlayer = getCurrentPlayer();
 
-        System.out.println("Kastar..");
+        Utils.print(Message.THROWING_DICE, true);
+
         Utils.sleep();
         int rolledDice = Utils.rollDice();
-        Utils.print(Message.PC_ROLLED_DICE, false, currentPlayer.getName(), String.valueOf(rolledDice));
+        Utils.print(Message.PC_ROLLED_DICE, true, currentPlayer.getName(), String.valueOf(rolledDice));
         currentPlayer.addPoints(rolledDice);
 
         Utils.sleep();
